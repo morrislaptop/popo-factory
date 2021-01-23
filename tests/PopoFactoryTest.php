@@ -2,12 +2,13 @@
 
 namespace Morrislaptop\PopoFactory\Tests;
 
+use DateTime;
 use Morrislaptop\PopoFactory\PopoFactory;
-use Morrislaptop\PopoFactory\Tests\Collections\PersonCollection;
+use Symfony\Component\Serializer\Serializer;
 use Morrislaptop\PopoFactory\Tests\Popos\FamilyData;
 use Morrislaptop\PopoFactory\Tests\Popos\PersonData;
 use Morrislaptop\PopoFactory\Tests\Popos\PersonDataDocBlock;
-use DateTime;
+use Morrislaptop\PopoFactory\Tests\Collections\PersonCollection;
 
 class PopoFactoryTest extends AbstractTestCase
 {
@@ -51,30 +52,6 @@ class PopoFactoryTest extends AbstractTestCase
 
         $this->expectErrorMessage('Typed property Morrislaptop\PopoFactory\PopoFactory::$PopoClass must not be accessed before initialization');
         $collectionProp->getValue($factory2);
-    }
-
-    /**
-     * @covers \Morrislaptop\PopoFactory\PopoFactory
-     * @covers \Morrislaptop\PopoFactory\Validator
-     */
-    public function test_it_will_not_accept_non_dto()
-    {
-        $this->markTestIncomplete('Can we validate the serializer can create it?');
-
-        $this->expectExceptionMessage('Class must be an instance of Spatie\Popo\Popo!');
-        PopoFactory::new()->dto(DateTime::class);
-    }
-
-    /**
-     * @covers \Morrislaptop\PopoFactory\PopoFactory
-     * @covers \Morrislaptop\PopoFactory\Validator
-     */
-    public function test_it_will_not_accept_non_collection()
-    {
-        $this->markTestIncomplete('Can we validate the serializer can create it?');
-
-        $this->expectExceptionMessage('Class must be an instance of Spatie\Popo\PopoCollection!');
-        PopoFactory::new()->collection(DateTime::class);
     }
 
     /**

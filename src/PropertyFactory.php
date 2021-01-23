@@ -7,15 +7,18 @@ use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionClass;
 use ReflectionProperty;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 
 class PropertyFactory
 {
     protected DocBlockFactory $phpDocumentor;
+    protected PhpDocExtractor $phpDocExtractor;
     protected static array $providers = [];
 
     public function __construct()
     {
         $this->phpDocumentor = DocBlockFactory::createInstance();
+        $this->phpDocExtractor = new PhpDocExtractor();
     }
 
     public static function new(): self
@@ -79,20 +82,22 @@ class PropertyFactory
 
     protected function extractDocBlockType(ReflectionProperty $property): ?string
     {
-        $docblock = $this->phpDocumentor->create($property->getDocComment());
+        $types = $this->phpDocExtractor->getTypes(
+            $property->class,
+            $property->name,
+        );
 
-        /** @var Var_[] An array of any variable tags. */
-        $var = $docblock->getTagsByName('var');
+        if ($types) {
+            // Picks a random type out of the options.
+            $type = $types[array_rand($types, 1)];
 
-        if ($var && isset($var[0])) {
-            $types = explode('|', $var[0]->getType());
+            if ($type->isCollection()) {
+                $collectionType = $type->getCollectionValueType();
+                $className = $collectionType->getClassName() ?? $collectionType->getBuiltinType();
+                return $className . '[]';
+            }
 
-            // Picks a random type out of the options and removes the first
-            // namespace character to match Reflection Type form.
-            return ltrim(
-                $types[array_rand($types, 1)],
-                '\\'
-            );
+            return $type->getClassName() ?? $type->getBuiltinType();
         }
 
         return null;
