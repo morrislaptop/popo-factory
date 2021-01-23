@@ -4,16 +4,8 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/morrislaptop/popo-factory/Tests?label=tests)](https://github.com/morrislaptop/popo-factory/actions?query=workflow%3ATests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/morrislaptop/popo-factory.svg?style=flat-square)](https://packagist.org/packages/morrislaptop/popo-factory)
 
-
-This is where your description should go. Try and limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/package-skeleton-php.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/package-skeleton-php)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+This package supports mocking POPO. This is a fork of [Data Transfer Object Factory](https://github.com/anteris-dev/data-transfer-object-factory) which supports normal 
+PHP Objects instead of DTO's.
 
 ## Installation
 
@@ -25,9 +17,61 @@ composer require morrislaptop/popo-factory
 
 ## Usage
 
+If you are simply using PHP default types in your DTOs, you can get started right away. Just pass your DTO FQDN to the static dto method. Calling this method on the factory returns an instance of `Morrislaptop\PopoFactory\PopoFactory` which provides the following methods.
+
+- `count()` - _Allows you to specify how many DTOs to be generated. By default they will be returned in an array unless a collection is specified._
+- `make()` - _Called when you are ready to generate the DTO. Returns the generated DTO._
+- `random()` - _Generates a random number of DTOs_
+- `sequence()` - _Alternates a specific state. (See below)_
+- `state()` - _Manually sets properties based on the array of values passed._
+
+Examples of these methods can be found below.
+
 ```php
-$skeleton = new Morrislaptop\PopoFactory();
-echo $skeleton->echoPhrase('Hello, Morrislaptop!');
+
+use Morrislaptop\PopoFactory\Factory;
+
+// Creates one DTO
+Factory::dto(PersonData::class)->make();
+
+// Creates two DTOs in an array
+Factory::dto(PersonData::class)->count(2)->make();
+
+// Sets the first name of every person to "Jim"
+Factory::dto(PersonData::class)
+    ->random()
+    ->state([
+        'firstName' => 'Jim',
+    ])
+    ->make();
+
+// Alternates the names of each person between "Jim" and "Susie"
+Factory::dto(PersonData::class)
+    ->random()
+    ->sequence(
+        [ 'firstName' => 'Jim' ],
+        [ 'firstName' => 'Susie' ]
+    )
+    ->make();
+
+```
+
+## Extending
+
+It used to be that you had to extend the factory class to utilize custom types. You can now do so through the static `registerProvider()` method on the `PropertyFactory` class. This method takes two arguments. The first should be the FQDN of the class you are providing (e.g. `Carbon\Carbon`) OR the built-in type (e.g. `string`). The second should be a callback that returns the generated value. This callback is passed two properties when called to assist in generating the value. The first is an instance of `Anteris\FakerMap\FakerMap` which can be used to help generate fake data. The second is an instance of `ReflectionProperty` which contains information about the property being generated.
+
+For example, to support Carbon:
+
+```php
+
+use Morrislaptop\PopoFactory\PropertyFactory;
+
+use Anteris\FakerMap\FakerMap;
+
+PropertyFactory::registerProvider('Carbon\Carbon', fn(FakerMap $fakerMap) => Carbon::parse(
+    $fakerMap->closest('dateTime')->fake()
+));
+
 ```
 
 ## Testing

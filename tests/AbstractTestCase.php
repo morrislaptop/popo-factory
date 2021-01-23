@@ -1,6 +1,6 @@
 <?php
 
-namespace Anteris\Tests\DataTransferObjectFactory;
+namespace Morrislaptop\PopoFactory\Tests;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
