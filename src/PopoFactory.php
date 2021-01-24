@@ -49,8 +49,10 @@ class PopoFactory
 
     /**
      * Sets a random number of Data Transfer Objects we should generate.
+     *
+     * @return static
      */
-    public function random(int $min = 3, int $max = 100)
+    public function random(int $min = 3, int $max = 100): static
     {
         return $this->count(random_int($min, $max));
     }
@@ -76,8 +78,10 @@ class PopoFactory
 
     /**
      * Create a sequence of overrides.
+     *
+     * @return static
      */
-    public function sequence(...$sequence)
+    public function sequence(...$sequence): static
     {
         return $this->state(Sequence::make(...$sequence));
     }
@@ -104,8 +108,10 @@ class PopoFactory
 
     /**
      * Sets multiple states.
+     *
+     * @return static
      */
-    public function states(array $states)
+    public function states(array $states): static
     {
         $clone = clone $this;
 
