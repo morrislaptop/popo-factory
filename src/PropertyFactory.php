@@ -3,19 +3,16 @@
 namespace Morrislaptop\PopoFactory;
 
 use Anteris\FakerMap\FakerMap;
-use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionProperty;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 
 class PropertyFactory
 {
-    protected DocBlockFactory $phpDocumentor;
     protected PhpDocExtractor $phpDocExtractor;
     protected static array $providers = [];
 
     public function __construct()
     {
-        $this->phpDocumentor = DocBlockFactory::createInstance();
         $this->phpDocExtractor = new PhpDocExtractor();
     }
 
@@ -102,22 +99,23 @@ class PropertyFactory
         return null;
     }
 
+    /**
+     * @param class-string $type
+     */
     protected function createPropertyOfType(string $type)
     {
         // Handles an array of DTOs
         if (strpos($type, '[]') !== false) {
             $type = str_replace('[]', '', $type);
 
-            return PopoFactory::new()
-                ->dto($type)
+            return PopoFactory::new($type)
                 ->random()
                 ->make();
         }
 
         // Handles a DTO
         if (Validator::isDTO($type)) {
-            return PopoFactory::new()
-                ->dto($type)
+            return PopoFactory::new($type)
                 ->make();
         }
 
@@ -125,27 +123,14 @@ class PropertyFactory
             case 'array':
                 return FakerMap::words();
 
-            break;
-
             case 'bool':
                 return FakerMap::bool();
-
-            break;
-
-            case 'DateTime':
-                return FakerMap::dateTime();
-
-            break;
 
             case 'int':
                 return FakerMap::randomDigit();
 
-            break;
-
             case 'float':
                 return FakerMap::randomFloat();
-
-            break;
         }
 
         return FakerMap::word();
@@ -153,15 +138,14 @@ class PropertyFactory
 
     protected function createPropertyOfRandomType()
     {
-        $type = array_rand([
+        $type = array_rand($types = [
             'array',
             'bool',
-            'DateTime',
             'int',
             'float',
             'string',
         ], 1);
 
-        return $this->createPropertyOfType($type);
+        return $this->createPropertyOfType($types[$type]);
     }
 }

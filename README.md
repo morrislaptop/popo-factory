@@ -19,7 +19,7 @@ composer require morrislaptop/popo-factory
 
 If you are simply using PHP default types in your DTOs, you can get started right away. Just pass your DTO FQDN to the static dto method. Calling this method on the factory returns an instance of `Morrislaptop\PopoFactory\PopoFactory` which provides the following methods.
 
-- `count()` - _Allows you to specify how many DTOs to be generated. By default they will be returned in an array unless a collection is specified._
+- `count()` - _Allows you to specify how many DTOs to be generated. They will be returned in an array._
 - `make()` - _Called when you are ready to generate the DTO. Returns the generated DTO._
 - `random()` - _Generates a random number of DTOs_
 - `sequence()` - _Alternates a specific state. (See below)_
@@ -29,16 +29,16 @@ Examples of these methods can be found below.
 
 ```php
 
-use Morrislaptop\PopoFactory\Factory;
+use Morrislaptop\PopoFactory\PopoFactory;
 
 // Creates one DTO
-Factory::dto(PersonData::class)->make();
+PopooFactory::new(PersonData::class)->make();
 
 // Creates two DTOs in an array
-Factory::dto(PersonData::class)->count(2)->make();
+PopoFactory::new(PersonData::class)->count(2)->make();
 
 // Sets the first name of every person to "Jim"
-Factory::dto(PersonData::class)
+PopoFactory::new(PersonData::class)
     ->random()
     ->state([
         'firstName' => 'Jim',
@@ -46,7 +46,7 @@ Factory::dto(PersonData::class)
     ->make();
 
 // Alternates the names of each person between "Jim" and "Susie"
-Factory::dto(PersonData::class)
+PopoFactory::new(PersonData::class)
     ->random()
     ->sequence(
         [ 'firstName' => 'Jim' ],

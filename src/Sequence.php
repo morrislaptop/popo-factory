@@ -6,15 +6,15 @@ class Sequence
 {
     protected int $index = 0;
     protected int $last;
-    protected $sequence;
+    protected array $sequence = [];
 
-    public function __construct(...$sequence)
+    public function __construct(array ...$sequence)
     {
         $this->sequence = $sequence;
         $this->last = count($sequence) - 1;
     }
 
-    public static function make(...$sequence): self
+    public static function make(array ...$sequence): self
     {
         return new self(...$sequence);
     }

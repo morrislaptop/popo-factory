@@ -7,20 +7,36 @@ use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Component\Serializer\Serializer;
 
+/**
+ * @psalm-consistent-constructor
+ */
 class PopoFactory
 {
-    protected int $count;
+    protected ?int $count = null;
+
+    /**
+     * @var class-string
+     */
     protected string $dataTransferObjectClass;
+
     protected array $states = [];
+
     protected Serializer $serializer;
 
-    public static function new(): static
+    /**
+     * @param class-string $dataTransferObjectClass
+     */
+    public static function new(string $dataTransferObjectClass): static
     {
-        return new static;
+        return new static($dataTransferObjectClass);
     }
 
-    public function __construct(Serializer $serializer = null)
+    /**
+     * @param class-string $dataTransferObjectClass
+     */
+    public function __construct(string $dataTransferObjectClass, Serializer $serializer = null)
     {
+        $this->dataTransferObjectClass = $dataTransferObjectClass;
         $this->serializer = $serializer ?: new Serializer([
             new \Spatie\EventSourcing\Support\CarbonNormalizer,
             // new \Spatie\EventSourcing\Support\ModelIdentifierNormalizer,
@@ -58,30 +74,11 @@ class PopoFactory
     }
 
     /**
-     * Sets the Data Transfer Object we are working with.
-     *
-     * @return static
-     */
-    public function dto(string $dataTransferObject): static
-    {
-        if (! class_exists($dataTransferObject)) {
-            throw new InvalidObjectException(
-                "Class $dataTransferObject does not exist!"
-            );
-        }
-
-        $clone = clone $this;
-        $clone->dataTransferObjectClass = $dataTransferObject;
-
-        return $clone;
-    }
-
-    /**
      * Create a sequence of overrides.
      *
      * @return static
      */
-    public function sequence(...$sequence): static
+    public function sequence(array ...$sequence): static
     {
         return $this->state(Sequence::make(...$sequence));
     }
@@ -98,26 +95,10 @@ class PopoFactory
         $clone = clone $this;
 
         if (! is_callable($state)) {
-            $state = fn () => $array;
+            $state = fn (): array => $state;
         }
 
         $clone->states[] = $state;
-
-        return $clone;
-    }
-
-    /**
-     * Sets multiple states.
-     *
-     * @return static
-     */
-    public function states(array $states): static
-    {
-        $clone = clone $this;
-
-        foreach ($states as $state) {
-            $clone = $this->state($state);
-        }
 
         return $clone;
     }
@@ -126,31 +107,25 @@ class PopoFactory
      * DTO Creator
      **************************************************************************/
 
-    public function make(array $attributes = [])
+    public function make(array $attributes = []): array|object
     {
-        if (! isset($this->dataTransferObjectClass)) {
-            throw new InvalidObjectException(
-                'Please specify an Object to be generated!'
-            );
-        }
-
         // Pass attributes along as state
         if (! empty($attributes)) {
             return $this->state($attributes)->make();
         }
 
-        if (! isset($this->count)) {
+        if (! $this->count) {
             return $this->makeDTO();
         }
 
         $multipleDTOs = $this->makeDTOs(
-            $this->count ?? random_int(3, 100)
+            $this->count ?: random_int(3, 100)
         );
 
         return $multipleDTOs;
     }
 
-    protected function makeDTO()
+    protected function makeDTO(): object
     {
         $class = new ReflectionClass($this->dataTransferObjectClass);
         $parameters = [];
