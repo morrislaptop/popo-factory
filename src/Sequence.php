@@ -11,7 +11,7 @@ class Sequence
     public function __construct(...$sequence)
     {
         $this->sequence = $sequence;
-        $this->last     = count($sequence) - 1;
+        $this->last = count($sequence) - 1;
     }
 
     public static function make(...$sequence)

@@ -2,9 +2,8 @@
 
 namespace Morrislaptop\PopoFactory\Tests;
 
-use Morrislaptop\PopoFactory\PopoFactory;
 use Morrislaptop\PopoFactory\Factory;
-use Morrislaptop\PopoFactory\Tests\Collections\PersonCollection;
+use Morrislaptop\PopoFactory\PopoFactory;
 use Morrislaptop\PopoFactory\Tests\Popos\PersonData;
 use PHPUnit\Framework\TestCase;
 

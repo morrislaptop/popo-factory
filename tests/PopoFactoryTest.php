@@ -2,13 +2,10 @@
 
 namespace Morrislaptop\PopoFactory\Tests;
 
-use DateTime;
 use Morrislaptop\PopoFactory\PopoFactory;
-use Symfony\Component\Serializer\Serializer;
 use Morrislaptop\PopoFactory\Tests\Popos\FamilyData;
 use Morrislaptop\PopoFactory\Tests\Popos\PersonData;
 use Morrislaptop\PopoFactory\Tests\Popos\PersonDataDocBlock;
-use Morrislaptop\PopoFactory\Tests\Collections\PersonCollection;
 
 class PopoFactoryTest extends AbstractTestCase
 {

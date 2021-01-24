@@ -3,9 +3,7 @@
 namespace Morrislaptop\PopoFactory;
 
 use Anteris\FakerMap\FakerMap;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\DocBlockFactory;
-use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 
@@ -94,6 +92,7 @@ class PropertyFactory
             if ($type->isCollection()) {
                 $collectionType = $type->getCollectionValueType();
                 $className = $collectionType->getClassName() ?? $collectionType->getBuiltinType();
+
                 return $className . '[]';
             }
 
@@ -125,22 +124,27 @@ class PropertyFactory
         switch ($type) {
             case 'array':
                 return FakerMap::words();
+
             break;
 
             case 'bool':
                 return FakerMap::bool();
+
             break;
 
             case 'DateTime':
                 return FakerMap::dateTime();
+
             break;
 
             case 'int':
                 return FakerMap::randomDigit();
+
             break;
 
             case 'float':
                 return FakerMap::randomFloat();
+
             break;
         }
 

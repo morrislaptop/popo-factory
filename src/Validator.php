@@ -2,9 +2,6 @@
 
 namespace Morrislaptop\PopoFactory;
 
-use ReflectionClass;
-use Spatie\DataTransferObject\DataTransferObject;
-
 class Validator
 {
     public static function isDTO(string $class)

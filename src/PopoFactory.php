@@ -2,10 +2,9 @@
 
 namespace Morrislaptop\PopoFactory;
 
+use Morrislaptop\PopoFactory\Exceptions\InvalidObjectException;
 use ReflectionClass;
 use ReflectionProperty;
-use Spatie\DataTransferObject\DataTransferObject;
-use Morrislaptop\PopoFactory\Exceptions\InvalidObjectException;
 use Symfony\Component\Serializer\Serializer;
 
 class PopoFactory
@@ -40,7 +39,7 @@ class PopoFactory
      */
     public function count(int $count)
     {
-        $clone        = clone $this;
+        $clone = clone $this;
         $clone->count = $count;
 
         return $clone;
@@ -65,7 +64,7 @@ class PopoFactory
             );
         }
 
-        $clone                          = clone $this;
+        $clone = clone $this;
         $clone->dataTransferObjectClass = $dataTransferObject;
 
         return $clone;
@@ -141,7 +140,7 @@ class PopoFactory
 
     protected function makeDTO()
     {
-        $class      = new ReflectionClass($this->dataTransferObjectClass);
+        $class = new ReflectionClass($this->dataTransferObjectClass);
         $parameters = [];
         $properties = $class->getProperties(ReflectionProperty::IS_PUBLIC);
 
@@ -175,7 +174,7 @@ class PopoFactory
     protected function makeDTOs(int $count): array
     {
         $numberOfDtosCreated = 0;
-        $dtos                = [];
+        $dtos = [];
 
         while ($numberOfDtosCreated < $count) {
             $dtos[] = $this->makeDTO();
