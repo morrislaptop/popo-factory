@@ -14,7 +14,7 @@ class Sequence
         $this->last = count($sequence) - 1;
     }
 
-    public static function make(...$sequence)
+    public static function make(...$sequence): self
     {
         return new self(...$sequence);
     }

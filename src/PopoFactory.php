@@ -14,7 +14,7 @@ class PopoFactory
     protected array $states = [];
     protected Serializer $serializer;
 
-    public static function new()
+    public static function new(): static
     {
         return new static;
     }
@@ -36,8 +36,10 @@ class PopoFactory
 
     /**
      * Sets the number of Data Transfer Objects we should generate.
+     *
+     * @return static
      */
-    public function count(int $count)
+    public function count(int $count): static
     {
         $clone = clone $this;
         $clone->count = $count;
@@ -55,8 +57,10 @@ class PopoFactory
 
     /**
      * Sets the Data Transfer Object we are working with.
+     *
+     * @return static
      */
-    public function dto(string $dataTransferObject)
+    public function dto(string $dataTransferObject): static
     {
         if (! class_exists($dataTransferObject)) {
             throw new InvalidObjectException(
@@ -82,13 +86,15 @@ class PopoFactory
      * Manually override attributes by passing an array of values.
      *
      * @param callable|array $state
+     *
+     * @return static
      */
-    public function state($state)
+    public function state($state): static
     {
         $clone = clone $this;
 
         if (! is_callable($state)) {
-            $state = fn () => $state;
+            $state = fn () => $array;
         }
 
         $clone->states[] = $state;
