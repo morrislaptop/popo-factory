@@ -21,5 +21,6 @@ class PersonDataDocBlock
 
         /** @var string */
         public $workAddress,
-    ) {}
+    ) {
+    }
 }

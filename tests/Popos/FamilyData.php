@@ -2,9 +2,6 @@
 
 namespace Morrislaptop\PopoFactory\Tests\Popos;
 
-use Spatie\Popo\Popo;
-use Morrislaptop\PopoFactory\Tests\Popos\PersonData;
-
 class FamilyData
 {
     public function __construct(
@@ -15,5 +12,6 @@ class FamilyData
         public $person3,
         /** @var PersonData[] */
         public $children,
-    ) { }
+    ) {
+    }
 }
