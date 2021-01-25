@@ -12,7 +12,7 @@ PHP Objects instead of DTO's.
 You can install the package via composer:
 
 ```bash
-composer require morrislaptop/popo-factory
+composer require morrislaptop/popo-factory --dev
 ```
 
 ## Usage
@@ -105,7 +105,7 @@ $person = PersonDataFactory::factory()
 
 ## Extending
 
-You can easily extend the factory to support other data types. You can do tthis through the static `registerProvider()` method on the `PropertyFactory` class. This method takes two arguments. The first should be the FQDN of the class you are providing (e.g. `Carbon\Carbon`) OR the built-in type (e.g. `string`). The second should be a callback that returns the generated value. This callback is passed two properties when called to assist in generating the value. The first is an instance of `Anteris\FakerMap\FakerMap` which can be used to help generate fake data. The second is an instance of `ReflectionProperty` which contains information about the property being generated.
+You can easily extend the factory to support other data types. You can do this through the static `registerProvider()` method on the `PropertyFactory` class. This method takes two arguments. The first should be the FQDN of the class you are providing (e.g. `Carbon\Carbon`) OR the built-in type (e.g. `string`). The second should be a callback that returns the generated value. This callback is passed two properties when called to assist in generating the value. The first is an instance of `Anteris\FakerMap\FakerMap` which can be used to help generate fake data. The second is an instance of `ReflectionProperty` which contains information about the property being generated.
 
 For example, to support Carbon:
 
