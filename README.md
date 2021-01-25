@@ -123,7 +123,7 @@ PropertyFactory::registerProvider('Carbon\Carbon', fn(FakerMap $fakerMap) => Car
 
 ## Plug
 
-Want an easy way to persist your POPOs in Laravel? Check out (laravel-castable-object)[https://github.com/morrislaptop/laravel-castable-object]
+Want an easy way to persist your POPOs in Laravel? Check out [laravel-castable-object](https://github.com/morrislaptop/laravel-castable-object)
 
 ## Testing
 
