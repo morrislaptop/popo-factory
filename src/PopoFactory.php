@@ -2,7 +2,6 @@
 
 namespace Morrislaptop\PopoFactory;
 
-use Morrislaptop\PopoFactory\Exceptions\InvalidObjectException;
 use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Component\Serializer\Serializer;
@@ -58,6 +57,7 @@ class PopoFactory
     public function count(int $count): static
     {
         $clone = clone $this;
+
         $clone->count = $count;
 
         return $clone;
@@ -107,7 +107,7 @@ class PopoFactory
      * DTO Creator
      **************************************************************************/
 
-    public function make(array $attributes = []): array|object
+    public function make(array $attributes = []): array | object
     {
         // Pass attributes along as state
         if (! empty($attributes)) {
@@ -131,14 +131,6 @@ class PopoFactory
         $parameters = [];
         $properties = $class->getProperties(ReflectionProperty::IS_PUBLIC);
 
-        // Resolve all our state options...
-        $preset = [];
-
-        foreach ($this->states as $state) {
-            $result = $state();
-            $preset = array_merge($preset, is_array($result) ? $result : []);
-        }
-
         foreach ($properties as $property) {
             if ($property->isStatic()) {
                 continue;
@@ -146,13 +138,12 @@ class PopoFactory
 
             $propertyName = $property->getName();
 
-            if (isset($preset[$propertyName])) {
-                $parameters[$propertyName] = $preset[$propertyName];
-
-                continue;
-            }
-
             $parameters[$propertyName] = PropertyFactory::new()->make($property);
+        }
+
+        foreach ($this->states as $state) {
+            $result = $state($parameters);
+            $parameters = array_merge($parameters, is_array($result) ? $result : []);
         }
 
         return $this->serializer->denormalize($parameters, $this->dataTransferObjectClass);
