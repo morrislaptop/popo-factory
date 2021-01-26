@@ -17,7 +17,65 @@ composer require morrislaptop/popo-factory --dev
 
 ## Usage
 
-If you are simply using PHP default types in your DTOs, you can get started right away. Just pass your DTO FQDN to the static dto method. Calling this method on the factory returns an instance of `Morrislaptop\PopoFactory\PopoFactory` which provides the following methods.
+```php
+use Morrislaptop\PopoFactory\PopoFactory;
+
+class PersonData
+{
+    public function __construct(
+        public $firstName,
+        public string $lastName,
+        public string $email,
+        public string $homeAddress,
+        public ?string $companyName,
+        public string $workAddress,
+        public Carbon $dob,
+        public PersonDataDocBlock $spouse,
+    ) {
+    }
+}
+
+PopooFactory::new(PersonData::class)->make();
+
+```
+
+Which creates:
+
+```
+^ Morrislaptop\PopoFactory\Tests\Popos\PersonData^ {#517
+  +firstName: "Kurt"
+  +lastName: "Nikolaus"
+  +email: "terrell37@example.net"
+  +homeAddress: """
+    41012 Alberta Prairie Apt. 682\n
+    North Simoneview, AK 97469
+    """
+  +companyName: "Parker, Berge and Johnston"
+  +workAddress: """
+    8200 Gulgowski Trace\n
+    Carrollton, ID 30180
+    """
+  +dob: Illuminate\Support\Carbon @1611654142^ {#515
+    date: 2021-01-26 09:42:22.835670 UTC (+00:00)
+  }
+  +spouse: Morrislaptop\PopoFactory\Tests\Popos\PersonDataDocBlock^ {#905
+    +firstName: "Angus"
+    +lastName: "Medhurst"
+    +email: "dejuan.ebert@example.com"
+    +homeAddress: """
+      199 Batz Rapid Suite 222\n
+      West Joyce, OK 52635
+      """
+    +companyName: "Schaden, Kris and Waters"
+    +workAddress: """
+      38214 Raymundo Summit\n
+      Barrowston, AR 31241-9280
+      """
+  }
+}
+```
+
+The `new` method returns an instance of `Morrislaptop\PopoFactory\PopoFactory` which provides the following methods.
 
 - `count()` - _Allows you to specify how many DTOs to be generated. They will be returned in an array._
 - `make()` - _Called when you are ready to generate the DTO. Returns the generated DTO._
@@ -28,12 +86,6 @@ If you are simply using PHP default types in your DTOs, you can get started righ
 Examples of these methods can be found below.
 
 ```php
-
-use Morrislaptop\PopoFactory\PopoFactory;
-
-// Creates one DTO
-PopooFactory::new(PersonData::class)->make();
-
 // Creates two DTOs in an array
 PopoFactory::new(PersonData::class)->count(2)->make();
 
