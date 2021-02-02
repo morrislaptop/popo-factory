@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.0",
         "anteris-dev/faker-map": "^1.1",
         "fakerphp/faker": "^1.13",
         "symfony/property-access": "^5.2",
