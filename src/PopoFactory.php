@@ -2,8 +2,12 @@
 
 namespace Morrislaptop\PopoFactory;
 
+use Morrislaptop\PopoFactory\Normalizer\CarbonNormalizer;
 use ReflectionClass;
 use ReflectionProperty;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
@@ -37,11 +41,10 @@ class PopoFactory
     {
         $this->dataTransferObjectClass = $dataTransferObjectClass;
         $this->serializer = $serializer ?: new Serializer([
-            new \Spatie\EventSourcing\Support\CarbonNormalizer,
-            // new \Spatie\EventSourcing\Support\ModelIdentifierNormalizer,
-            new \Symfony\Component\Serializer\Normalizer\DateTimeNormalizer,
-            new \Symfony\Component\Serializer\Normalizer\ArrayDenormalizer,
-            new \Spatie\EventSourcing\Support\ObjectNormalizer,
+            new CarbonNormalizer,
+            new DateTimeNormalizer,
+            new ArrayDenormalizer,
+            new ObjectNormalizer,
         ], []);
     }
 
