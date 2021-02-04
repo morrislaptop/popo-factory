@@ -2,7 +2,7 @@
 
 namespace Morrislaptop\PopoFactory;
 
-use Morrislaptop\PopoFactory\Normalizer\CarbonNormalizer;
+use Morrislaptop\PopoFactory\Normalizer\CarbonDenormalizer;
 use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
@@ -41,7 +41,7 @@ class PopoFactory
     {
         $this->dataTransferObjectClass = $dataTransferObjectClass;
         $this->serializer = $serializer ?: new Serializer([
-            new CarbonNormalizer,
+            new CarbonDenormalizer,
             new DateTimeNormalizer,
             new ArrayDenormalizer,
             new ObjectNormalizer,
