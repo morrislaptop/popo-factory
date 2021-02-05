@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Morrislaptop\PopoFactory;
 
 use Morrislaptop\PopoFactory\Normalizer\CarbonNormalizer;
@@ -29,28 +31,26 @@ class PopoFactory
     /**
      * @param class-string $dataTransferObjectClass
      */
-    public static function new(string $dataTransferObjectClass): static
+    public function __construct(string $dataTransferObjectClass, Serializer $serializer = null)
     {
-        return new static($dataTransferObjectClass);
+        $this->dataTransferObjectClass = $dataTransferObjectClass;
+        $this->serializer = $serializer ?: new Serializer([
+            new CarbonNormalizer(),
+            new DateTimeNormalizer(),
+            new ArrayDenormalizer(),
+            new ObjectNormalizer(),
+        ], []);
     }
 
     /**
      * @param class-string $dataTransferObjectClass
      */
-    public function __construct(string $dataTransferObjectClass, Serializer $serializer = null)
+    public static function new(string $dataTransferObjectClass): static
     {
-        $this->dataTransferObjectClass = $dataTransferObjectClass;
-        $this->serializer = $serializer ?: new Serializer([
-            new CarbonNormalizer,
-            new DateTimeNormalizer,
-            new ArrayDenormalizer,
-            new ObjectNormalizer,
-        ], []);
+        return new static($dataTransferObjectClass);
     }
 
-    /***************************************************************************
-     * Factory Options
-     **************************************************************************/
+    // Factory Options
 
     /**
      * Sets the number of Data Transfer Objects we should generate.
@@ -89,7 +89,7 @@ class PopoFactory
     /**
      * Manually override attributes by passing an array of values.
      *
-     * @param callable|array $state
+     * @param array|callable $state
      *
      * @return static
      */
@@ -97,7 +97,7 @@ class PopoFactory
     {
         $clone = clone $this;
 
-        if (! is_callable($state)) {
+        if (! \is_callable($state)) {
             $state = fn (): array => $state;
         }
 
@@ -106,10 +106,7 @@ class PopoFactory
         return $clone;
     }
 
-    /***************************************************************************
-     * DTO Creator
-     **************************************************************************/
-
+    // DTO Creator
     public function make(array $attributes = []): array | object
     {
         // Pass attributes along as state
@@ -146,7 +143,7 @@ class PopoFactory
 
         foreach ($this->states as $state) {
             $result = $state($parameters);
-            $parameters = array_merge($parameters, is_array($result) ? $result : []);
+            $parameters = array_merge($parameters, \is_array($result) ? $result : []);
         }
 
         return $this->serializer->denormalize($parameters, $this->dataTransferObjectClass);

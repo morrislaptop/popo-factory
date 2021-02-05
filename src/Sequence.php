@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Morrislaptop\PopoFactory;
 
 class Sequence
@@ -11,12 +13,7 @@ class Sequence
     public function __construct(array ...$sequence)
     {
         $this->sequence = $sequence;
-        $this->last = count($sequence) - 1;
-    }
-
-    public static function make(array ...$sequence): self
-    {
-        return new self(...$sequence);
+        $this->last = \count($sequence) - 1;
     }
 
     public function __invoke()
@@ -24,9 +21,16 @@ class Sequence
         return $this->cycleIndexAfter($this->sequence[$this->index]);
     }
 
+    public static function make(array ...$sequence): self
+    {
+        return new self(...$sequence);
+    }
+
     /**
      * Allows us to cycle the index after retrieving the sequence value
      * and before returning it.
+     *
+     * @param mixed $val
      */
     private function cycleIndexAfter($val)
     {

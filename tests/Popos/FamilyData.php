@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Morrislaptop\PopoFactory\Tests\Popos;
 
 class FamilyData

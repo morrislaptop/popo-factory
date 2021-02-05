@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Morrislaptop\PopoFactory;
 
 use Anteris\FakerMap\FakerMap;
@@ -18,7 +20,7 @@ class PropertyFactory
 
     public static function new(): self
     {
-        return new self;
+        return new self();
     }
 
     public static function registerProvider(string $name, callable $callback): void
@@ -32,7 +34,7 @@ class PropertyFactory
 
         // If a provider was registered to handle this type, pass off to that.
         if (isset(static::$providers[$type])) {
-            return static::$providers[$type](new FakerMap, $property);
+            return static::$providers[$type](new FakerMap(), $property);
         }
 
         // We will try to generate a property that matches what the property name
@@ -42,7 +44,7 @@ class PropertyFactory
         // If the property was type cast, we will ensure the returned type is
         // what the property expects. Otherwise we will fallback on a value based
         // on the type.
-        if ($type != null) {
+        if ($type !== null) {
             $faker = $faker->type($type)->default(
                 $this->createPropertyOfType($type)
             );
@@ -50,7 +52,7 @@ class PropertyFactory
 
         // If the property did not have a type, we will fallback on a random
         // type.
-        if ($type == null) {
+        if ($type === null) {
             $faker = $faker->default($this->createPropertyOfRandomType());
         }
 

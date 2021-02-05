@@ -23,7 +23,7 @@
         "symfony/serializer": "^5.2"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.17",
+        "friendsofphp/php-cs-fixer": "^2.18",
         "nesbot/carbon": "^2.43",
         "phpunit/phpunit": "^9.5",
         "spatie/ray": "^1.16",
