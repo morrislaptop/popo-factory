@@ -124,7 +124,7 @@ class PropertyFactory
                 return FakerMap::words();
 
             case 'bool':
-                return FakerMap::bool();
+                return FakerMap::boolean();
 
             case 'int':
                 return FakerMap::randomDigit();
