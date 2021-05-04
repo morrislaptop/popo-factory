@@ -3,6 +3,7 @@
 namespace Morrislaptop\PopoFactory;
 
 use Anteris\FakerMap\FakerMap;
+use ReflectionNamedType;
 use ReflectionProperty;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 
@@ -68,7 +69,7 @@ class PropertyFactory
 
         $type = $property->getType();
 
-        if ($type) {
+        if ($type && $type instanceof ReflectionNamedType) {
             return $type->getName();
         }
 
