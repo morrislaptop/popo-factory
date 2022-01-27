@@ -11,10 +11,12 @@ class PropertyFactory
 {
     protected PhpDocExtractor $phpDocExtractor;
     protected static array $providers = [];
+    private FakerMap $fakerMap;
 
-    public function __construct()
+    public function __construct(?FakerMap $fakerMap = null)
     {
         $this->phpDocExtractor = new PhpDocExtractor();
+        $this->fakerMap = $fakerMap ?? FakerMap::new();
     }
 
     public static function new(): self
@@ -33,12 +35,12 @@ class PropertyFactory
 
         // If a provider was registered to handle this type, pass off to that.
         if (isset(static::$providers[$type])) {
-            return static::$providers[$type](new FakerMap, $property);
+            return static::$providers[$type](FakerMap::new(), $property);
         }
 
         // We will try to generate a property that matches what the property name
         // indicates it expects. (e.g. $firstName would have "John")
-        $faker = FakerMap::closest($property->getName());
+        $faker = $this->fakerMap->closest($property->getName());
 
         // If the property was type cast, we will ensure the returned type is
         // what the property expects. Otherwise we will fallback on a value based
@@ -122,19 +124,19 @@ class PropertyFactory
 
         switch ($type) {
             case 'array':
-                return FakerMap::words();
+                return FakerMap::faker()->words();
 
             case 'bool':
-                return FakerMap::boolean();
+                return FakerMap::faker()->boolean();
 
             case 'int':
-                return FakerMap::randomDigit();
+                return FakerMap::faker()->randomDigit();
 
             case 'float':
-                return FakerMap::randomFloat();
+                return FakerMap::faker()->randomFloat();
         }
 
-        return FakerMap::word();
+        return FakerMap::faker()->word();
     }
 
     protected function createPropertyOfRandomType()
