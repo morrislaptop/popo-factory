@@ -91,7 +91,7 @@ class PropertyFactory
 
             if ($type->isCollection()) {
                 // Patch for Symfony 6
-                if (method_exists($type,'getCollectionValueTypes')) {
+                if (method_exists($type, 'getCollectionValueTypes')) {
                     $collectionType = $type->getCollectionValueTypes()[0];
                 } else {
                     $collectionType = $type->getCollectionValueType();
