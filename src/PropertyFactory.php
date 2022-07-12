@@ -91,9 +91,15 @@ class PropertyFactory
 
             if ($type->isCollection()) {
                 // Patch for Symfony 6
+                /**
+                 * @psalm-suppress RedundantCondition
+                 */
                 if (method_exists($type, 'getCollectionValueTypes')) {
                     $collectionType = $type->getCollectionValueTypes()[0];
                 } else {
+                    /**
+                     * @psalm-suppress UndefinedMethod
+                     */
                     $collectionType = $type->getCollectionValueType();
                 }
                 $className = $collectionType->getClassName() ?? $collectionType->getBuiltinType();
