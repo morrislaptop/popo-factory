@@ -18,9 +18,9 @@
         "php": "^8.0",
         "anteris-dev/faker-map": "^2.0",
         "fakerphp/faker": "^1.13",
-        "symfony/property-access": "^5.2",
-        "symfony/property-info": "^5.2",
-        "symfony/serializer": "^5.2"
+        "symfony/property-access": "^5.2 || ^6.0",
+        "symfony/property-info": "^5.2 || ^6.0",
+        "symfony/serializer": "^5.2 || ^6.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.17",
