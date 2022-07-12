@@ -90,7 +90,12 @@ class PropertyFactory
             $type = $types[array_rand($types, 1)];
 
             if ($type->isCollection()) {
-                $collectionType = $type->getCollectionValueType();
+                // Patch for Symfony 6
+                if (method_exists($type,'getCollectionValueTypes')) {
+                    $collectionType = $type->getCollectionValueTypes()[0];
+                } else {
+                    $collectionType = $type->getCollectionValueType();
+                }
                 $className = $collectionType->getClassName() ?? $collectionType->getBuiltinType();
 
                 return $className . '[]';
