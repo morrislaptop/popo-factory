@@ -95,13 +95,16 @@ class PropertyFactory
                  * @psalm-suppress RedundantCondition
                  */
                 if (method_exists($type, 'getCollectionValueTypes')) {
-                    $collectionType = $type->getCollectionValueTypes()[0];
+                    $collectionType = $type->getCollectionValueTypes()[0] ?? null;
                 } else {
                     /**
                      * @psalm-suppress UndefinedMethod
                      */
                     $collectionType = $type->getCollectionValueType();
                 }
+
+                if (! $collectionType) return 'array';
+
                 $className = $collectionType->getClassName() ?? $collectionType->getBuiltinType();
 
                 return $className . '[]';
@@ -118,6 +121,31 @@ class PropertyFactory
      */
     protected function createPropertyOfType(string $type)
     {
+        switch ($type) {
+            case 'array':
+                return FakerMap::faker()->words();
+
+            case 'bool':
+                return FakerMap::faker()->boolean();
+            case 'bool[]':
+                return [FakerMap::faker()->boolean()];
+
+            case 'int':
+                return FakerMap::faker()->randomDigit();
+            case 'int[]':
+                return [FakerMap::faker()->randomDigit()];
+
+            case 'float':
+                return FakerMap::faker()->randomFloat();
+            case 'float[]':
+                return [FakerMap::faker()->randomFloat()];
+
+            case 'string':
+                return FakerMap::faker()->word();
+            case 'string[]':
+                return FakerMap::faker()->words();
+        }
+
         // Handles an array of DTOs
         if (strpos($type, '[]') !== false) {
             $type = str_replace('[]', '', $type);
@@ -131,20 +159,6 @@ class PropertyFactory
         if (Validator::isDTO($type)) {
             return PopoFactory::new($type)
                 ->make();
-        }
-
-        switch ($type) {
-            case 'array':
-                return FakerMap::faker()->words();
-
-            case 'bool':
-                return FakerMap::faker()->boolean();
-
-            case 'int':
-                return FakerMap::faker()->randomDigit();
-
-            case 'float':
-                return FakerMap::faker()->randomFloat();
         }
 
         return FakerMap::faker()->word();
