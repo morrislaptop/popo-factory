@@ -103,7 +103,9 @@ class PropertyFactory
                     $collectionType = $type->getCollectionValueType();
                 }
 
-                if (! $collectionType) return 'array';
+                if (! $collectionType) {
+                    return 'array';
+                }
 
                 $className = $collectionType->getClassName() ?? $collectionType->getBuiltinType();
 
